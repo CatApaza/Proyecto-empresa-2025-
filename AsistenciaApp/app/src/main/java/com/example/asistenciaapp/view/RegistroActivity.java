@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.asistenciaapp.R;
 import com.example.asistenciaapp.api.ApiService;
-import com.example.asistenciaapp.api.RetrofitClien;
+import com.example.asistenciaapp.api.RetrofitClien; // CORREGIDO
 import com.example.asistenciaapp.model.Usuario;
 
 import java.io.IOException;
@@ -50,7 +50,8 @@ public class RegistroActivity extends AppCompatActivity {
             return;
         }
 
-        Usuario usuario = new Usuario(nombre, correo, contrasena, rol, codigoJefe);
+        // Ajustar según el constructor real de Usuario
+        Usuario usuario = new Usuario(0, nombre, correo, contrasena, rol, codigoJefe);
 
         ApiService apiService = RetrofitClien.getRetrofitInstance().create(ApiService.class);
         Call<Void> call = apiService.registrarUsuario(usuario);
