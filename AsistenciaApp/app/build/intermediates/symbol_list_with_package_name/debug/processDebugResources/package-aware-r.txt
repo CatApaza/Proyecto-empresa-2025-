@@ -3114,6 +3114,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable rounded_black_background
 drawable rounded_white_container
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3592,7 +3593,12 @@ id textinput_helper_text
 id textinput_placeholder
 id textinput_prefix_text
 id textinput_suffix_text
+id tilCodigoJefe
+id tilContrasena
+id tilCorreo
+id tilNombre
 id tilPassword
+id tilRol
 id tilUser
 id time
 id title
@@ -3615,6 +3621,7 @@ id transition_transform
 id triangle
 id tvForgotPassword
 id tvSignUp
+id tvYaTienesCuenta
 id unchecked
 id uniform
 id unlabeled

@@ -13,6 +13,7 @@ drawable gradient_netflix
 drawable gradient_purple
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable rounded_black_background
 drawable rounded_white_container
 id btnIrRegistro
 id btnLogin
@@ -26,10 +27,16 @@ id etRol
 id etUser
 id ivBackground
 id main
+id tilCodigoJefe
+id tilContrasena
+id tilCorreo
+id tilNombre
 id tilPassword
+id tilRol
 id tilUser
 id tvForgotPassword
 id tvSignUp
+id tvYaTienesCuenta
 layout activity_login
 layout activity_main
 layout activity_registro
