@@ -1,15 +1,21 @@
 R_DEF: Internal format may change without notice
 local
 color black
+color netflix_red
+color netflix_red_dark
 color purple_200
 color purple_500
 color purple_700
 color teal_200
 color teal_700
 color white
+drawable gradient_netflix
 drawable gradient_purple
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable rounded_black_background
+drawable rounded_black_container
+drawable rounded_white_container
 id btnIrRegistro
 id btnLogin
 id btnRegistrar
@@ -17,11 +23,15 @@ id etCodigoJefe
 id etContrasena
 id etCorreo
 id etNombre
+id etPassword
 id etRol
+id etUser
 id ivBackground
 id main
-id tilContrasena
-id tilCorreo
+id tilPassword
+id tilUser
+id tvForgotPassword
+id tvSignUp
 layout activity_login
 layout activity_main
 layout activity_registro
