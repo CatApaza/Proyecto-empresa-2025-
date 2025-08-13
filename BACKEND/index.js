@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -30,18 +31,32 @@ app.post('/api/registro', async (req, res) => {
       'INSERT INTO usuarioss (nombre, correo, contrasena, rol) VALUES ($1, $2, $3, $4) RETURNING *',
       [nombre, correo, contrasena, rol]
     );
-    res.status(201).json({ mensaje: 'Usuario registrado', usuario: result.rows[0] });
+
+    res.status(201).json({
+      mensaje: 'Usuario registrado',
+      usuario: result.rows[0]
+    });
+
   } catch (error) {
-    console.error('❌ Error al registrar usuario:', error.message);
+    console.error('❌ Error al registrar usuario:', error);
+
+    // Error de correo duplicado
     if (error.code === '23505') {
-      return res.status(400).json({ error: 'El correo ya está registrado' });
+      return res.status(400).json({
+        error: 'El correo ya está registrado',
+        detalle: error.detail || error.message
+      });
     }
-    res.status(500).json({ error: 'Error al registrar usuario' });
+
+    // Otros errores
+    res.status(500).json({
+      error: 'Error al registrar usuario',
+      detalle: error.message
+    });
   }
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-
+// Iniciar servidor en todas las interfaces (para acceso desde el emulador Android)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
 });

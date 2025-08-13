@@ -1,6 +1,7 @@
 package com.example.asistenciaapp.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,6 +11,8 @@ import com.example.asistenciaapp.R;
 import com.example.asistenciaapp.api.ApiService;
 import com.example.asistenciaapp.api.RetrofitClien;
 import com.example.asistenciaapp.model.Usuario;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,14 +59,23 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(RegistroActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this, "Registro exitoso ✅", Toast.LENGTH_SHORT).show();
+                    Log.i("API_SUCCESS", "Usuario registrado correctamente");
                 } else {
-                    Toast.makeText(RegistroActivity.this, "Error al registrar", Toast.LENGTH_SHORT).show();
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "Error desconocido";
+                        Log.e("API_ERROR", "Código: " + response.code() + " - " + errorBody);
+                        Toast.makeText(RegistroActivity.this, "Error: " + errorBody, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        Log.e("API_ERROR", "Error leyendo el cuerpo de la respuesta", e);
+                        Toast.makeText(RegistroActivity.this, "Error desconocido al registrar", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("API_FAIL", "Fallo de conexión", t);
                 Toast.makeText(RegistroActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
