@@ -1,20 +1,24 @@
 package com.example.asistenciaapp.view;
 
-
-
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.asistenciaapp.R;
+import com.example.asistenciaapp.api.ApiService;
+import com.example.asistenciaapp.api.RetrofitClien;
+import com.example.asistenciaapp.model.Usuario;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegistroActivity extends AppCompatActivity {
 
-    EditText etNombre, etCorreo, etContrasena, etRol, etCodigoJefe;
-    Button btnRegistrar;
+    private EditText etNombre, etCorreo, etContrasena, etRol, etCodigoJefe;
+    private Button btnRegistrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,25 +32,39 @@ public class RegistroActivity extends AppCompatActivity {
         etCodigoJefe = findViewById(R.id.etCodigoJefe);
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
-        btnRegistrar.setOnClickListener(v -> {
-            String nombre = etNombre.getText().toString();
-            String correo = etCorreo.getText().toString();
-            String contrasena = etContrasena.getText().toString();
-            String rol = etRol.getText().toString().toLowerCase();
-            String codigoJefe = etCodigoJefe.getText().toString();
+        btnRegistrar.setOnClickListener(v -> registrarUsuario());
+    }
 
-            if (rol.equals("jefe")) {
-                if (codigoJefe.equals("ECOLIM2025")) {
-                    Toast.makeText(this, "Registrado como jefe", Toast.LENGTH_SHORT).show();
-                    finish(); // volver al login
+    private void registrarUsuario() {
+        String nombre = etNombre.getText().toString().trim();
+        String correo = etCorreo.getText().toString().trim();
+        String contrasena = etContrasena.getText().toString().trim();
+        String rol = etRol.getText().toString().trim();
+        String codigoJefe = etCodigoJefe.getText().toString().trim();
+
+        if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || rol.isEmpty()) {
+            Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Usuario usuario = new Usuario(nombre, correo, contrasena, rol, codigoJefe);
+
+        ApiService apiService = RetrofitClien.getRetrofitInstance().create(ApiService.class);
+        Call<Void> call = apiService.registrarUsuario(usuario);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(RegistroActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Código de jefe incorrecto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this, "Error al registrar", Toast.LENGTH_SHORT).show();
                 }
-            } else if (rol.equals("trabajador")) {
-                Toast.makeText(this, "Registrado como trabajador", Toast.LENGTH_SHORT).show();
-                finish(); // volver al login
-            } else {
-                Toast.makeText(this, "Rol inválido. Usa 'jefe' o 'trabajador'", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(RegistroActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -8,7 +8,7 @@ public class Usuario {
     private String rol;
 
     // Constructor
-    public Usuario(String nombre, String correo, String contrasena, String rol) {
+    public Usuario(String s, String nombre, String correo, String contrasena, String rol) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;

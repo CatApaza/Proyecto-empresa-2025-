@@ -31,10 +31,10 @@
             android:name="com.example.asistenciaapp.view.RegistroActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.asistenciaapp.view.LoginActivity"
+            android:name="com.example.asistenciaapp.view.MainActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.asistenciaapp.view.MainActivity"
+            android:name="com.example.asistenciaapp.view.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

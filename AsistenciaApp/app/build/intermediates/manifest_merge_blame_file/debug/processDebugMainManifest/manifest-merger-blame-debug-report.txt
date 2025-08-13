@@ -50,14 +50,14 @@
 32-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:17:13-37
 33        <activity
 33-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:18:9-20:40
-34            android:name="com.example.asistenciaapp.view.LoginActivity"
-34-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:19:13-47
+34            android:name="com.example.asistenciaapp.view.MainActivity"
+34-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:19:13-46
 35            android:exported="false" />
 35-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:20:13-37
 36        <activity
 36-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:21:9-29:20
-37            android:name="com.example.asistenciaapp.view.MainActivity"
-37-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:22:13-46
+37            android:name="com.example.asistenciaapp.view.LoginActivity"
+37-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:22:13-47
 38            android:exported="true" >
 38-->C:\Users\Usuario\Downloads\Proyecto-empresa-2025-\AsistenciaApp\app\src\main\AndroidManifest.xml:23:13-36
 39            <intent-filter>
