@@ -1,15 +1,18 @@
 package com.example.asistenciaapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.asistenciaapp.R;
 import com.example.asistenciaapp.api.ApiService;
-import com.example.asistenciaapp.api.RetrofitClien; // CORREGIDO
+import com.example.asistenciaapp.api.RetrofitClien;
 import com.example.asistenciaapp.model.Usuario;
 
 import java.io.IOException;
@@ -22,6 +25,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     private EditText etNombre, etCorreo, etContrasena, etRol, etCodigoJefe;
     private Button btnRegistrar;
+    private TextView tvYaTienesCuenta; //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,16 @@ public class RegistroActivity extends AppCompatActivity {
         etRol = findViewById(R.id.etRol);
         etCodigoJefe = findViewById(R.id.etCodigoJefe);
         btnRegistrar = findViewById(R.id.btnRegistrar);
+        tvYaTienesCuenta = findViewById(R.id.tvYaTienesCuenta); // Inicializa el TextView
 
         btnRegistrar.setOnClickListener(v -> registrarUsuario());
+
+        // Configura el OnClickListener para el TextView de "Iniciar sesión"
+        tvYaTienesCuenta.setOnClickListener(v -> {
+            Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Cierra la actividad de registro
+        });
     }
 
     private void registrarUsuario() {

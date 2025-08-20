@@ -1374,6 +1374,7 @@ color background_floating_material_light
 color background_material_dark
 color background_material_light
 color black
+color blue
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -1434,6 +1435,8 @@ color error_color_material_dark
 color error_color_material_light
 color foreground_material_dark
 color foreground_material_light
+color gray_dark
+color gray_light
 color highlighted_text_material_dark
 color highlighted_text_material_light
 color m3_appbar_overlay_color
@@ -2122,6 +2125,7 @@ color teal_700
 color tooltip_background_dark
 color tooltip_background_light
 color white
+color yellow
 dimen abc_action_bar_content_inset_material
 dimen abc_action_bar_content_inset_with_nav
 dimen abc_action_bar_default_height_material
@@ -3019,6 +3023,8 @@ drawable design_ic_visibility
 drawable design_ic_visibility_off
 drawable design_password_eye
 drawable design_snackbar_background
+drawable et_border_focused
+drawable et_border_normal
 drawable gradient_netflix
 drawable gradient_purple
 drawable ic_arrow_back_black_24
@@ -3115,6 +3121,7 @@ drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable rounded_black_background
+drawable rounded_edittext
 drawable rounded_white_container
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3362,7 +3369,8 @@ id invisible
 id inward
 id italic
 id item_touch_helper_previous_elevation
-id ivBackground
+id ivBack
+id ivLogo
 id jumpToEnd
 id jumpToStart
 id labeled
@@ -3375,6 +3383,8 @@ id line3
 id linear
 id listMode
 id list_item
+id llHeader
+id llInputs
 id m3_side_sheet
 id main
 id marquee
@@ -3593,13 +3603,6 @@ id textinput_helper_text
 id textinput_placeholder
 id textinput_prefix_text
 id textinput_suffix_text
-id tilCodigoJefe
-id tilContrasena
-id tilCorreo
-id tilNombre
-id tilPassword
-id tilRol
-id tilUser
 id time
 id title
 id titleDividerNoCustom
@@ -3620,7 +3623,8 @@ id transition_scene_layoutid_cache
 id transition_transform
 id triangle
 id tvForgotPassword
-id tvSignUp
+id tvRethinkingIT
+id tvTitle
 id tvYaTienesCuenta
 id unchecked
 id uniform
