@@ -652,6 +652,7 @@ int attr imagePanX 0x7f03023c
 int attr imagePanY 0x7f03023d
 int attr imageRotate 0x7f03023e
 int attr imageZoom 0x7f03023f
+int attr implementationMode 0x7f0304ec
 int attr indeterminateAnimationType 0x7f030240
 int attr indeterminateProgressStyle 0x7f030241
 int attr indicatorColor 0x7f030242
@@ -1019,6 +1020,7 @@ int attr round 0x7f0303ab
 int attr roundPercent 0x7f0303ac
 int attr saturation 0x7f0303ad
 int attr scaleFromTextSize 0x7f0303ae
+int attr scaleType 0x7f0304ed
 int attr scrimAnimationDuration 0x7f0303af
 int attr scrimBackground 0x7f0303b0
 int attr scrimVisibleHeightTrigger 0x7f0303b1
@@ -2107,6 +2109,7 @@ int color primary_text_disabled_material_light 0x7f0502fc
 int color purple_200 0x7f0502fd
 int color purple_500 0x7f0502fe
 int color purple_700 0x7f0502ff
+int color red 0x7f050312
 int color ripple_material_dark 0x7f050300
 int color ripple_material_light 0x7f050301
 int color secondary_text_default_material_dark 0x7f050302
@@ -3017,6 +3020,7 @@ int drawable btn_radio_off_mtrl 0x7f07007e
 int drawable btn_radio_off_to_on_mtrl_animation 0x7f07007f
 int drawable btn_radio_on_mtrl 0x7f070080
 int drawable btn_radio_on_to_off_mtrl_animation 0x7f070081
+int drawable circle_overlay 0x7f0700ee
 int drawable design_fab_background 0x7f070082
 int drawable design_ic_visibility 0x7f070083
 int drawable design_ic_visibility_off 0x7f070084
@@ -3226,12 +3230,14 @@ int id bounce 0x7f080061
 int id bounceBoth 0x7f080062
 int id bounceEnd 0x7f080063
 int id bounceStart 0x7f080064
+int id btnCapture 0x7f08020d
 int id btnIrRegistro 0x7f080065
 int id btnLogin 0x7f080066
 int id btnRegistrar 0x7f080067
 int id buttonPanel 0x7f080068
 int id cache_measures 0x7f080069
 int id callMeasure 0x7f08006a
+int id cameraPreview 0x7f08020e
 int id cancel_button 0x7f08006b
 int id carryVelocity 0x7f08006c
 int id center 0x7f08006d
@@ -3245,6 +3251,7 @@ int id chains 0x7f080074
 int id checkbox 0x7f080075
 int id checked 0x7f080076
 int id chronometer 0x7f080077
+int id circleOverlay 0x7f08020f
 int id circle_center 0x7f080078
 int id clear_text 0x7f080079
 int id clip_horizontal 0x7f08007a
@@ -3252,6 +3259,7 @@ int id clip_vertical 0x7f08007b
 int id clockwise 0x7f08007c
 int id closest 0x7f08007d
 int id collapseActionView 0x7f08007e
+int id compatible 0x7f080210
 int id compress 0x7f08007f
 int id confirm_button 0x7f080080
 int id constraint 0x7f080081
@@ -3323,6 +3331,9 @@ int id expand_activities_button 0x7f0800c2
 int id expanded_menu 0x7f0800c3
 int id fade 0x7f0800c4
 int id fill 0x7f0800c5
+int id fillCenter 0x7f080211
+int id fillEnd 0x7f080212
+int id fillStart 0x7f080213
 int id fill_horizontal 0x7f0800c6
 int id fill_vertical 0x7f0800c7
 int id filled 0x7f0800c8
@@ -3385,7 +3396,7 @@ int id list_item 0x7f080100
 int id llHeader 0x7f080101
 int id llInputs 0x7f080102
 int id m3_side_sheet 0x7f080103
-int id main 0x7f080104
+int id mainLayout 0x7f080214
 int id marquee 0x7f080105
 int id masked 0x7f080106
 int id match_constraint 0x7f080107
@@ -3494,6 +3505,7 @@ int id path 0x7f08016d
 int id pathRelative 0x7f08016e
 int id peekHeight 0x7f08016f
 int id percent 0x7f080170
+int id performance 0x7f080215
 int id pin 0x7f080171
 int id position 0x7f080172
 int id postLayout 0x7f080173
@@ -3622,6 +3634,7 @@ int id transition_scene_layoutid_cache 0x7f0801ed
 int id transition_transform 0x7f0801ee
 int id triangle 0x7f0801ef
 int id tvForgotPassword 0x7f0801f0
+int id tvResultado 0x7f080216
 int id tvRethinkingIT 0x7f0801f1
 int id tvTitle 0x7f0801f2
 int id tvYaTienesCuenta 0x7f0801f3
@@ -6800,6 +6813,9 @@ int styleable PopupWindow_android_popupAnimationStyle 1
 int styleable PopupWindow_overlapAnchor 2
 int[] styleable PopupWindowBackgroundState { 0x7f0303f6 }
 int styleable PopupWindowBackgroundState_state_above_anchor 0
+int[] styleable PreviewView { 0x7f0304ec, 0x7f0304ed }
+int styleable PreviewView_implementationMode 0
+int styleable PreviewView_scaleType 1
 int[] styleable PropertySet { 0x010100dc, 0x0101031f, 0x7f0302a1, 0x7f03034e, 0x7f0304d6 }
 int styleable PropertySet_android_visibility 0
 int styleable PropertySet_android_alpha 1

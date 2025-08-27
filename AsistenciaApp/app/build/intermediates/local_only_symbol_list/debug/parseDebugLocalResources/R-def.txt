@@ -9,10 +9,12 @@ color netflix_red_dark
 color purple_200
 color purple_500
 color purple_700
+color red
 color teal_200
 color teal_700
 color white
 color yellow
+drawable circle_overlay
 drawable et_border_focused
 drawable et_border_normal
 drawable gradient_netflix
@@ -22,9 +24,12 @@ drawable ic_launcher_foreground
 drawable rounded_black_background
 drawable rounded_edittext
 drawable rounded_white_container
+id btnCapture
 id btnIrRegistro
 id btnLogin
 id btnRegistrar
+id cameraPreview
+id circleOverlay
 id etCodigoJefe
 id etContrasena
 id etCorreo
@@ -36,8 +41,9 @@ id ivBack
 id ivLogo
 id llHeader
 id llInputs
-id main
+id mainLayout
 id tvForgotPassword
+id tvResultado
 id tvRethinkingIT
 id tvTitle
 id tvYaTienesCuenta
