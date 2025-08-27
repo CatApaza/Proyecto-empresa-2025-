@@ -3,8 +3,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClien {
-    public static final String BASE_URL = "http://10.0.2.2:3000/";
-    // Para emulador Android y tu backend local
+    // 🔑 Usa tu IP local en vez de 10.0.2.2
+    public static final String BASE_URL = "http://192.168.20.190:3000/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance() {
@@ -17,3 +17,4 @@ public class RetrofitClien {
         return retrofit;
     }
 }
+
