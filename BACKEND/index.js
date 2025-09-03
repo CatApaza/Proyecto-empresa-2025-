@@ -56,29 +56,30 @@ app.post('/api/registro', async (req, res) => {
 
 // 📌 Inicio de sesión (Login)
 app.post('/api/login', async (req, res) => {
-  let { correo, contrasena } = req.body;
+  let { correo, contrasena, rol } = req.body;
 
   // Limpiar datos de entrada
   correo = (correo || '').trim().toLowerCase();
   contrasena = (contrasena || '').trim();
+  rol = (rol || '').trim().toLowerCase();
 
-  console.log("📥 Datos recibidos en login:", correo, contrasena);
+  console.log("📥 Datos recibidos en login:", correo, contrasena, rol);
 
-  if (!correo || !contrasena) {
-    return res.status(400).json({ error: 'Correo y contraseña son obligatorios' });
+  if (!correo || !contrasena || !rol) {
+    return res.status(400).json({ error: 'Correo, contraseña y rol son obligatorios' });
   }
 
   try {
-    // Buscar usuario por correo y contraseña
+    // Buscar usuario por correo, contraseña y rol
     const result = await db.query(
-      'SELECT * FROM usuarioss WHERE LOWER(correo) = $1 AND contrasena = $2',
-      [correo, contrasena]
+      'SELECT * FROM usuarioss WHERE LOWER(correo) = $1 AND contrasena = $2 AND LOWER(rol) = $3',
+      [correo, contrasena, rol]
     );
 
     console.log("📤 Resultado query:", result.rows);
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Credenciales incorrectas' });
+      return res.status(401).json({ error: 'Credenciales incorrectas o rol no coincide' });
     }
 
     res.status(200).json({

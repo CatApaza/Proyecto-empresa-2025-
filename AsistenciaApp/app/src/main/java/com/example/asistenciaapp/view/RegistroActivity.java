@@ -3,29 +3,29 @@ package com.example.asistenciaapp.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.RadioButton;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.asistenciaapp.R;
-import com.example.asistenciaapp.api.ApiService;
-import com.example.asistenciaapp.api.RetrofitClien;
-import com.example.asistenciaapp.model.Usuario;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegistroActivity extends AppCompatActivity {
 
-    private EditText etNombre, etCorreo, etContrasena, etRol, etCodigoJefe;
+    private EditText etNombre, etCorreo, etContrasena;
+    private RadioButton rbTrabajador, rbJefe;
     private Button btnRegistrar;
-    private TextView tvYaTienesCuenta; //
+
+    private static final String URL_REGISTRO = "http://10.0.2.2:3000/api/registro";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,62 +35,54 @@ public class RegistroActivity extends AppCompatActivity {
         etNombre = findViewById(R.id.etNombre);
         etCorreo = findViewById(R.id.etCorreo);
         etContrasena = findViewById(R.id.etContrasena);
-        etRol = findViewById(R.id.etRol);
-        etCodigoJefe = findViewById(R.id.etCodigoJefe);
+        rbTrabajador = findViewById(R.id.rbTrabajador);
+        rbJefe = findViewById(R.id.rbJefe);
         btnRegistrar = findViewById(R.id.btnRegistrar);
-        tvYaTienesCuenta = findViewById(R.id.tvYaTienesCuenta); // Inicializa el TextView
 
         btnRegistrar.setOnClickListener(v -> registrarUsuario());
-
-        // Configura el OnClickListener para el TextView de "Iniciar sesión"
-        tvYaTienesCuenta.setOnClickListener(v -> {
-            Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish(); // Cierra la actividad de registro
-        });
     }
 
     private void registrarUsuario() {
         String nombre = etNombre.getText().toString().trim();
         String correo = etCorreo.getText().toString().trim();
         String contrasena = etContrasena.getText().toString().trim();
-        String rol = etRol.getText().toString().trim();
-        String codigoJefe = etCodigoJefe.getText().toString().trim();
+
+        String rol = rbTrabajador.isChecked() ? "trabajador" :
+                rbJefe.isChecked() ? "jefe" : "";
 
         if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || rol.isEmpty()) {
-            Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Ajustar según el constructor real de Usuario
-        Usuario usuario = new Usuario(0, nombre, correo, contrasena, rol, codigoJefe);
+        JSONObject usuario = new JSONObject();
+        try {
+            usuario.put("nombre", nombre);
+            usuario.put("correo", correo);
+            usuario.put("contrasena", contrasena);
+            usuario.put("rol", rol);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        ApiService apiService = RetrofitClien.getRetrofitInstance().create(ApiService.class);
-        Call<Void> call = apiService.registrarUsuario(usuario);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(RegistroActivity.this, "Registro exitoso ✅", Toast.LENGTH_SHORT).show();
-                    Log.i("API_SUCCESS", "Usuario registrado correctamente");
-                } else {
-                    try {
-                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "Error desconocido";
-                        Log.e("API_ERROR", "Código: " + response.code() + " - " + errorBody);
-                        Toast.makeText(RegistroActivity.this, "Error: " + errorBody, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        Log.e("API_ERROR", "Error leyendo el cuerpo de la respuesta", e);
-                        Toast.makeText(RegistroActivity.this, "Error desconocido al registrar", Toast.LENGTH_SHORT).show();
-                    }
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                URL_REGISTRO,
+                usuario,
+                response -> {
+                    Toast.makeText(this, "Usuario registrado ✅", Toast.LENGTH_SHORT).show();
+                    Log.d("Registro", "Respuesta: " + response.toString());
+                    startActivity(new Intent(RegistroActivity.this, LoginActivity.class));
+                    finish();
+                },
+                error -> {
+                    Toast.makeText(this, "Error al registrar ❌", Toast.LENGTH_SHORT).show();
+                    Log.e("Registro", "Error: " + error.toString());
                 }
-            }
+        );
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("API_FAIL", "Fallo de conexión", t);
-                Toast.makeText(RegistroActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        queue.add(request);
     }
 }
+

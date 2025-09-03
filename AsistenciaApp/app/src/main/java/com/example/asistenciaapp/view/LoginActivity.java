@@ -2,82 +2,124 @@ package com.example.asistenciaapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.asistenciaapp.R;
-import com.example.asistenciaapp.api.ApiService;
-import com.example.asistenciaapp.api.RetrofitClien;
-import com.example.asistenciaapp.model.LoginResponse;
-import com.example.asistenciaapp.model.Usuario;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etCorreo, etContrasena;
-    Button btnLogin, btnIrRegistro;
+    private RadioButton rbTrabajador, rbJefe;
+    private EditText etCodigo, etUser, etPassword;
+    private Button btnLogin, btnRegister;
+
+    private static final String CODIGO_JEFE = "12345"; // código fijo para jefe
+    private static final String URL_LOGIN = "http://10.0.2.2:3000/api/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etCorreo = findViewById(R.id.etUser);
-        etContrasena = findViewById(R.id.etPassword);
+        rbTrabajador = findViewById(R.id.rbTrabajador);
+        rbJefe = findViewById(R.id.rbJefe);
+        etCodigo = findViewById(R.id.etCodigo);
+        etUser = findViewById(R.id.editUser);
+        etPassword = findViewById(R.id.editPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnIrRegistro = findViewById(R.id.btnIrRegistro);
+        btnRegister = findViewById(R.id.btnRegister);
 
-        btnLogin.setOnClickListener(v -> {
-            String correo = etCorreo.getText().toString().trim();
-            String contrasena = etContrasena.getText().toString().trim();
-
-            if (correo.isEmpty() || contrasena.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            loginUsuario(correo, contrasena);
+        // Mostrar/ocultar campo código
+        rbJefe.setOnClickListener(v -> {
+            etCodigo.setText(""); // limpiar
+            etCodigo.setVisibility(android.view.View.VISIBLE);
+        });
+        rbTrabajador.setOnClickListener(v -> {
+            etCodigo.setText(""); // limpiar
+            etCodigo.setVisibility(android.view.View.GONE);
         });
 
-        btnIrRegistro.setOnClickListener(v -> {
+        // Botón Login
+        btnLogin.setOnClickListener(v -> loginUsuario());
+
+        // Botón Registrarse
+        btnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
             startActivity(intent);
         });
     }
 
-    private void loginUsuario(String correo, String contrasena) {
-        ApiService apiService = RetrofitClien.getRetrofitInstance().create(ApiService.class);
+    private void loginUsuario() {
+        String correo = etUser.getText().toString().trim();
+        String contrasena = etPassword.getText().toString().trim();
+        String rol = rbTrabajador.isChecked() ? "trabajador" :
+                rbJefe.isChecked() ? "jefe" : "";
 
-        Usuario usuarioLogin = new Usuario(correo, contrasena);
+        if (correo.isEmpty() || contrasena.isEmpty() || rol.isEmpty()) {
+            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Call<LoginResponse> call = apiService.login(usuarioLogin);
+        if (rol.equals("jefe")) {
+            String codigo = etCodigo.getText().toString().trim();
+            if (codigo.isEmpty()) {
+                Toast.makeText(this, "Ingresa el código de jefe", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!codigo.equals(CODIGO_JEFE)) {
+                Toast.makeText(this, "❌ Código de jefe incorrecto", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getUsuario() != null) {
-                    Usuario usuario = response.body().getUsuario();
-                    Toast.makeText(LoginActivity.this, "Bienvenido " + usuario.getNombre(), Toast.LENGTH_SHORT).show();
+        // JSON para login
+        JSONObject datos = new JSONObject();
+        try {
+            datos.put("correo", correo);
+            datos.put("contrasena", contrasena);
+            datos.put("rol", rol);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("usuario_nombre", usuario.getNombre());
-                    intent.putExtra("usuario_rol", usuario.getRol());
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+        // Petición al backend
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                URL_LOGIN,
+                datos,
+                response -> {
+                    Log.d("Login", "Respuesta: " + response.toString());
+                    Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show();
+
+                    if (rol.equals("trabajador")) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, JefeActivity.class));
+                    }
+                },
+                error -> {
+                    String mensajeError = "Error en login ❌";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        mensajeError += " - " + new String(error.networkResponse.data);
+                    }
+                    Toast.makeText(this, mensajeError, Toast.LENGTH_SHORT).show();
+                    Log.e("Login", "Error: " + error.toString());
                 }
-            }
+        );
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        queue.add(request);
     }
 }

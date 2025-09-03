@@ -42,6 +42,11 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.AsistenciaApp" >
+
+        <!-- ✅ Agregada JefeActivity -->
+        <activity
+            android:name="com.example.asistenciaapp.view.JefeActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.asistenciaapp.view.RegistroActivity"
             android:exported="false" />

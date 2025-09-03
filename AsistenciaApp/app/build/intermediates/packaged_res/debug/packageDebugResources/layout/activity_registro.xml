@@ -22,6 +22,7 @@
             android:orientation="vertical"
             android:padding="32dp">
 
+            <!-- Logo -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +34,6 @@
                     android:id="@+id/ivLogo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -46,6 +46,7 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
+            <!-- Nombre -->
             <EditText
                 android:id="@+id/etNombre"
                 android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                 android:background="@drawable/rounded_edittext"
                 tools:ignore="TextFieldStyle" />
 
+            <!-- Correo -->
             <EditText
                 android:id="@+id/etCorreo"
                 android:layout_width="match_parent"
@@ -68,6 +70,7 @@
                 android:textColor="@android:color/black"
                 android:background="@drawable/rounded_edittext" />
 
+            <!-- Contraseña -->
             <EditText
                 android:id="@+id/etContrasena"
                 android:layout_width="match_parent"
@@ -79,28 +82,31 @@
                 android:textColor="@android:color/black"
                 android:background="@drawable/rounded_edittext" />
 
-            <EditText
-                android:id="@+id/etRol"
+            <!-- Rol -->
+            <RadioGroup
+                android:id="@+id/rgRol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Rol (jefe o trabajador)"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/rounded_edittext" />
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/etCodigoJefe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Código jefe (solo si eres jefe)"
-                android:inputType="text"
-                android:padding="16dp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/rounded_edittext" />
+                <RadioButton
+                    android:id="@+id/rbTrabajador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trabajador" />
 
+                <RadioButton
+                    android:id="@+id/rbJefe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jefe"
+                    android:layout_marginStart="32dp" />
+            </RadioGroup>
+
+            <!-- Código Jefe -->
+
+            <!-- Botón -->
             <Button
                 android:id="@+id/btnRegistrar"
                 android:layout_width="match_parent"
@@ -113,6 +119,7 @@
                 android:paddingVertical="16dp"
                 app:cornerRadius="4dp" />
 
+            <!-- Link Login -->
             <TextView
                 android:id="@+id/tvYaTienesCuenta"
                 android:layout_width="wrap_content"
