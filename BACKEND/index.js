@@ -1,102 +1,67 @@
-// index.js
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const db = require('./db');
-
-dotenv.config();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { validarEmpleado } = require('./face');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
 
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('Servidor de asistencia funcionando ✅');
+// 📂 Configuración de multer (guardar archivos temporales en /uploads)
+const upload = multer({ dest: 'uploads/' });
+
+// 📌 Ruta para registrar foto de referencia de un empleado
+app.post('/api/empleados/registro/:idEmpleado', upload.single('foto'), (req, res) => {
+  const empleadoId = req.params.idEmpleado;
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'No se recibió ninguna foto' });
+  }
+
+  // 📂 Carpeta destino donde se guardará la foto de referencia
+  const dir = path.join(__dirname, 'models', empleadoId);
+
+  // Crear carpeta si no existe
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  // Guardar la foto con nombre único
+  const filePath = path.join(dir, Date.now() + path.extname(req.file.originalname));
+  fs.renameSync(req.file.path, filePath);
+
+  res.json({ mensaje: `✅ Foto registrada para empleado ${empleadoId}`, ruta: filePath });
 });
 
-// 📌 Registro de usuario
-app.post('/api/registro', async (req, res) => {
-  const { nombre, correo, contrasena, rol } = req.body;
+// 📌 Ruta para validar foto contra la de referencia
+app.post('/api/empleados/validar/:idEmpleado', upload.single('foto'), async (req, res) => {
+  const empleadoId = req.params.idEmpleado;
 
-  if (!nombre || !correo || !contrasena || !rol) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  if (!req.file) {
+    return res.status(400).json({ error: 'No se recibió ninguna foto' });
   }
+
+  const filePath = req.file.path; // foto temporal en /uploads/
 
   try {
-    const result = await db.query(
-      'INSERT INTO usuarioss (nombre, correo, contrasena, rol) VALUES ($1, $2, $3, $4) RETURNING *',
-      [nombre.trim(), correo.trim().toLowerCase(), contrasena.trim(), rol]
-    );
+    const esValido = await validarEmpleado(empleadoId, filePath);
 
-    res.status(201).json({
-      mensaje: 'Usuario registrado',
-      usuario: result.rows[0]
-    });
+    // Borrar archivo temporal (no se necesita después de validar)
+    fs.unlinkSync(filePath);
 
-  } catch (error) {
-    console.error('❌ Error al registrar usuario:', error);
-
-    if (error.code === '23505') {
-      return res.status(400).json({
-        error: 'El correo ya está registrado',
-        detalle: error.detail || error.message
-      });
+    if (esValido) {
+      return res.json({ exito: true, mensaje: `✅ Empleado ${empleadoId} validado correctamente` });
+    } else {
+      return res.status(401).json({ exito: false, mensaje: '❌ Validación fallida, rostro no coincide' });
     }
-
-    res.status(500).json({
-      error: 'Error al registrar usuario',
-      detalle: error.message
-    });
+  } catch (error) {
+    console.error('❌ Error en validación:', error);
+    return res.status(500).json({ error: 'Error en validación', detalle: error.message });
   }
 });
 
-// 📌 Inicio de sesión (Login)
-app.post('/api/login', async (req, res) => {
-  let { correo, contrasena, rol } = req.body;
-
-  // Limpiar datos de entrada
-  correo = (correo || '').trim().toLowerCase();
-  contrasena = (contrasena || '').trim();
-  rol = (rol || '').trim().toLowerCase();
-
-  console.log("📥 Datos recibidos en login:", correo, contrasena, rol);
-
-  if (!correo || !contrasena || !rol) {
-    return res.status(400).json({ error: 'Correo, contraseña y rol son obligatorios' });
-  }
-
-  try {
-    // Buscar usuario por correo, contraseña y rol
-    const result = await db.query(
-      'SELECT * FROM usuarioss WHERE LOWER(correo) = $1 AND contrasena = $2 AND LOWER(rol) = $3',
-      [correo, contrasena, rol]
-    );
-
-    console.log("📤 Resultado query:", result.rows);
-
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Credenciales incorrectas o rol no coincide' });
-    }
-
-    res.status(200).json({
-      mensaje: 'Inicio de sesión exitoso',
-      usuario: result.rows[0]
-    });
-
-  } catch (error) {
-    console.error('❌ Error en inicio de sesión:', error);
-    res.status(500).json({
-      error: 'Error al iniciar sesión',
-      detalle: error.message
-    });
-  }
-});
-
-// Iniciar servidor
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+// 🚀 Iniciar servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
